@@ -1,0 +1,47 @@
+ubuntu@ip-172-31-24-70:~/gaming$ npx hardhat console --network localhost
+Welcome to Node.js v22.11.0.
+Type ".help" for more information.
+> const signers = await ethers.getSigners();
+undefined
+> const contract =  await ethers.getContractFactory("Gaming")
+undefined
+>  const cd = await contract.deploy()
+undefined
+> const cd = await contract.deploy()
+undefined
+> await cd.fundGame({ value: ethers.parseEther("100.0")})
+
+>  await ethers.provider.getBalance(signers[0])
+9899998780117060310460n
+>  await ethers.provider.getBalance(cd.target)
+100000000000000000000n
+> await cd.withdrawFunds()
+>  await ethers.provider.getBalance(signers[0])
+9999998754134035792448n
+> await cd.determineWinner(1,2,true)
+true
+> await cd.determineWinner(2,1,true)
+false
+> await cd.determineWinner(1,2,false)
+false
+> await cd.determineWinner(1,2,true)
+true
+> await cd.setMysteryNumber(2)
+}
+> await cd.winOrLoseTest(1, true, {from: signers[0] ,value: ethers.parseEther("1.0") })
+}
+> await cd.players(signers[0])
+Result(2) [ 0n, 1n ]
+> var p = await cd.players(signers[0])
+undefined
+> p.losses
+1n
+> p.wins
+0n
+>
+> await cd.withdrawFunds()
+
+> await cd.winOrLoseTest(1, false, {from: signers[0] ,value: ethers.parseEther("1.0") })
+> await cd.players(signers[0])
+Result(2) [ 1n, 1n ]
+> await cd.setMysteryNumber(6)
