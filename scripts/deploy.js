@@ -1,13 +1,13 @@
 const hre = require("hardhat")
 
 async function main() {
-    const Gaming  = await hre.ethers.getContractFactory("Gaming");
+    const TodoList  = await hre.ethers.getContractFactory("TodoList");
     // deploy contracts
-    const gaming  = await Gaming.deploy();
-    await gaming.waitForDeployment();
-    console.log("gaming deployed to: ", await gaming.getAddress());
-    const contractAddress  = await gaming.getAddress();
-    saveFrontendFiles(contractAddress  , "Gaming");
+    const todoList  = await TodoList.deploy();
+    await todoList.waitForDeployment();
+    console.log("todoList deployed to: ", await todoList.getAddress());
+    const contractAddress  = await todoList.getAddress();
+    saveFrontendFiles(contractAddress  , "TodoList");
 }
 
 function saveFrontendFiles(contractAddress, name) {

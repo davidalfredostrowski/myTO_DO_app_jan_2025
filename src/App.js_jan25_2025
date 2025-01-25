@@ -74,11 +74,9 @@ const readTasks = async () => {
 
   const createTask = async () => {
 //    if (!newTaskContent || !contract) return;
- //setNewTaskContent("");
-//i do    const tx = await contract.createTask("junk");
 
-    const tx = await contract.createTask(newTaskContent);
-	  await tx.wait();
+    const tx = await contract.createTask("junk");
+    await tx.wait();
 
   //  const _taskCount = await contract.taskCount();
   //  setTaskCount(taskCount.toNumber());
@@ -136,7 +134,7 @@ const readTasks = async () => {
         <button onClick={readTasks}>Read Tasks</button>
 	  </div>
 
-      <h2>DO style Tasks</h2>
+      <h2>Tasks</h2>
       <ul>
         {tasks.map((task) => (
           <li key={task.id.toNumber()}>

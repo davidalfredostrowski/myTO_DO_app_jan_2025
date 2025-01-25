@@ -1,0 +1,44 @@
+ubuntu@ip-172-31-43-22:~/gaming$ npx hardhat console --network localhost
+Welcome to Node.js v22.12.0.
+Type ".help" for more information.
+> const signers = await ethers.getSigners()
+undefined
+> signers
+
+> const contract =  await ethers.getContractFactory("TodoList")
+undefined
+>  const cd = await contract.deploy()
+undefined
+> cd.createTask("Do the dishes")
+Promise {
+  <pending>,
+  [Symbol(async_id_symbol)]: 2963,
+  [Symbol(trigger_async_id_symbol)]: 14
+}
+> await cd.createTask("Take out trash")
+
+> await cd.taskCount()
+3n
+> await cd.tasks(1)
+Result(3) [ 1n, 'Do the dishes', false ]
+> await cd.tasks(2)
+Result(3) [ 2n, 'Take out trash', false ]
+> await cd.tasks(3)
+Result(3) [ 3n, 'Walk the dog', false ]
+> await cd.toggleCompleted(1)
+> await cd.tasks(1)
+Result(3) [ 1n, 'Do the dishes', true ]
+> await cd.tasks(2)
+Result(3) [ 2n, 'Take out trash', false ]
+> await cd.toggleCompleted(2)
+> await cd.tasks(2)
+Result(3) [ 2n, 'Take out trash', true ]
+>
+> await cd.toggleCompleted(1)
+> await cd.tasks(1)
+Result(3) [ 1n, 'Do the dishes', false ]
+> await cd.toggleCompleted(1)
+> await cd.tasks(1)
+Result(3) [ 1n, 'Do the dishes', true ]
+>
+
