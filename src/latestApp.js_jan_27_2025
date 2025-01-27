@@ -1,0 +1,221 @@
+
+import React,{ useState, useEffect } from 'react'
+import { ethers, BrowserProvider } from "ethers";
+import { providers } from 'ethers/providers';
+import TodoListAbi from './contractsData/TodoList.json'
+import TodoListAddress from './contractsData/TodoList-address.json'
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+  const [taskCount, setTaskCount] = useState(0);
+  const [newTaskContent, setNewTaskContent] = useState("");
+  const [provider, setProvider] = useState(null);
+  const [signer, setSigner] = useState(null);
+  const [contract, setContract] = useState(null);
+
+  const [playerSessions, setPlayerSessions] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
+        useEffect(() => {
+    const initialize = async () =>  {
+
+    const web3Provider = new ethers.JsonRpcProvider("http://ec2-54-191-85-235.us-west-2.compute.amazonaws.com:8545");
+
+
+      setProvider(web3Provider);
+    //   const _provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await web3Provider.getSigner();
+      setSigner(signer);
+
+      console.log("TodoListAddress.address",TodoListAddress.address)
+      console.log("TodoListAbi.abii",TodoListAbi.abi)
+
+      const todoContract = new ethers.Contract(TodoListAddress.address, TodoListAbi.abi, signer);
+console.log("todoContract", todoContract)
+      setContract(todoContract);
+
+ //     const taskCount = await contract.taskCount();
+
+    //  setTaskCount(taskCount.toNumber());
+
+    // const _tasks = [];
+  //    for (let i = 1; i <= taskCount; i++) {
+  //      const task = await contract.tasks(i);
+  //      tasks.push(task);
+   //   }
+     // setTasks(tasks);
+
+    };
+
+    initialize();
+  }, [TodoListAddress, TodoListAbi]);
+
+const readTasks = async () => {
+
+ const events = await contract.queryFilter("TaskCreated");
+     const objectLength = Object.keys(events).length
+     console.log("objectLength=>", objectLength)
+     console.log("events=>",events)
+     console.log("one==>",events[0].args[2])
+
+    const sessions = events.map((event) => ({
+       content: event.args[1],
+       id: event.args[0],
+       completed: event.args[2]
+     }));
+     setPlayerSessions(sessions.reverse()); // Show latest first
+     console.log("sessions=>", sessions.reverse())
+}
+
+const readCompletedTasks = async () => {
+
+ const events = await contract.queryFilter("TaskCompleted");
+     const objectLength = Object.keys(events).length
+     console.log("objectLength=>", objectLength)
+     console.log("events=>",events)
+
+     const completedTasks = events.map((event) => ({
+       content: event.args[1],
+       id: event.args[0]
+     }));
+     setCompletedTasks(completedTasks.reverse()); // Show latest first
+}
+
+
+
+
+  const createTask = async () => {
+//    if (!newTaskContent || !contract) return;
+ //setNewTaskContent("");
+//i do    const tx = await contract.createTask("junk");
+
+    const tx = await contract.createTask(newTaskContent);
+          await tx.wait();
+
+  //  const _taskCount = await contract.taskCount();
+  //  setTaskCount(taskCount.toNumber());
+
+ //   const task = await contract.tasks(taskCount);
+ //   setTasks([...tasks, task]);
+ //   setNewTaskContent("");     // const _tasks = [];
+  //    for (let i = 1; i <= taskCount; i++) {
+  //      const task = await contract.tasks(i);
+  //      tasks.push(task);
+
+  //   }
+     // setTasks(tasks);
+
+    }
+
+   // initialize();
+//  }, [TodoListAddress, TodoListAbi]);
+
+//const readTasks = async () => {
+
+// const events = await contract.queryFilter("TaskCreated");
+//     const objectLength = Object.keys(events).length
+///     console.log("objectLength=>", objectLength)
+//     console.log("events=>",events)
+//
+//     const sessions = events.map((event) => ({
+//       content: event.args[1]
+//     }));
+//     setPlayerSessions(sessions.reverse()); // Show latest first
+//
+//  }
+//
+  //
+//  const toggleTaskCompletion  = async(id) => {
+async function toggleTaskCompletion(id)  {
+
+if (!contract) return;
+console.log("id in toggleTaskCompletion" , id)
+   const tx = await contract.toggleCompleted(id);
+    await tx.wait();
+
+ //   const updatedTask = await contract.tasks(id);
+ //   setTasks(tasks.map(task => (task.id.toNumber() === id ? updatedTask : task)));
+  }
+
+  return (
+    <div>
+      <h1>Todo List</h1>
+
+      <div>
+        <input
+          type="text"
+          placeholder="New task content"
+          value={newTaskContent}
+          onChange={(e) => setNewTaskContent(e.target.value)}
+        />
+        <button onClick={createTask}>Add Task</button>
+        <button onClick={readTasks}>Read Tasks</button>
+        <button onClick={readCompletedTasks}> Read Completed Tasks</button>
+          </div>
+
+      <h2>DO style Tasks</h2>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id.toNumber()}>
+            <span>{task.content}</span>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => toggleTaskCompletion(task.id.toNumber())}
+            />
+          </li>
+        ))}
+      </ul>
+           {playerSessions.length === 0 ? (
+                <p>No sessions found</p>
+              ) : (
+           playerSessions.map((session, index) => (
+                  <div key={index} style={{ marginBottom: "10px" }}>
+                  <p><b>content:</b> {session.content} ETH</p>
+                  <p><b>contentid: </b> { session.id } </p>
+                  <p><b>completed: </b> { session.completed.toString() } </p>
+                  <p><b>contentid: </b> { session.id } </p>
+                <input
+                    type="checkbox"
+                    checked={session.completed }
+                    onChange={() => toggleTaskCompletion(session.id)}
+                />
+                        <hr />
+                  </div>
+                ))
+              )}
+
+
+
+          {completedTasks.length === 0 ? (
+                <p>No sessions found</p>
+              ) : (
+                completedTasks.map((session, index) => (
+                <div key={index} style={{ marginBottom: "10px" }}>
+                  <p><b>content:</b> {session.content} ETH</p>
+                  <p><b>contentid: </b> { session.id } </p>
+                        <hr />
+                  </div>
+                ))
+              )}
+
+
+
+
+
+
+
+
+
+          </div>
+  );
+}
+
+export default App;
+
+
+
+
+    
+
+      
