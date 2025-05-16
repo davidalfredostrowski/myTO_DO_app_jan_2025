@@ -142,6 +142,17 @@ Result(3) [ 1n, 'take out trash', true ]
 
 
 
+> const events = await cd.queryFilter("TaskCreated")
+Uncaught SyntaxError: Identifier 'events' has already been declared
+> events.forEach(e => console.log(e.args))
+Result(3) [ 1n, 'take out trash', false ]
+Result(3) [ 2n, 'walk dog', false ]
+Result(3) [ 3n, 'walk dog', false ]
+undefined
+
+
+#### not using this unless you do a formal deployment...!!!!!!!
+
 terminal three: 
 
 ubuntu@ip-172-31-46-232:~/hello/src$ npx hardhat console --network localhost
