@@ -38,6 +38,12 @@ contract TodoList {
     emit TaskCompleted(_id, _task.completed);
   }
 
+    // Optional: Get task data (if not using public mapping)
+    function getTask(uint _id) public view returns (uint, string memory, bool) {
+        Task memory task = tasks[_id];
+        return (task.id, task.content, task.completed);
+    }
+
 }
 
 
