@@ -117,58 +117,12 @@ Welcome to Node.js v14.21.3.
 Type ".help" for more information.
 >  const signers = await ethers.getSigners();
 undefined
-> const contract =  await ethers.getContractFactory("Hello")
+> const contract =  await ethers.getContractFactory("TodoList")
 undefined
 >const bal = await ethers.provider.getBalance(signers[0])
 > const cd = await contract.deploy()
-> const bal2 = await ethers.provider.getBalance(signers[0])
-undefined
-> bal2
-9999990092056610771200n
-> await cd.set('aaabbbb')
-Promise {
-  <pending>,
-  [Symbol(async_id_symbol)]: 3248,
-  [Symbol(trigger_async_id_symbol)]: 13,
-  [Symbol(destroyed)]: { destroyed: false }
-}
-> await cd.get()
-'aaabbbb'
->const bal2 = await ethers.provider.getBalance(signers[0])
->bal
-
-
-
-
-> const b2 = await ethers.provider.getBlock(3, true)
-
-> const d3 = b2.prefetchedTransactions
-
-
-> const d4 = b2.prefetchedTransactions
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->  const signers = await ethers.getSigners();
-Uncaught SyntaxError: Identifier 'signers' has already been declared
->  const contract =  await ethers.getContractFactory("TodoList")
-Uncaught SyntaxError: Identifier 'contract' has already been declared
->  const cd = await contract.deploy()
-Uncaught SyntaxError: Identifier 'cd' has already been declared
+> 
 > await cd.createTask("walk dog")
-
-
 
 > await cd.tasks(1)
 Result(3) [ 1n, 'take out trash', false ]
